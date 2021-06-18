@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="co.board.mapper.BoardMapper">
+	
+	<select id="getList" resultType="hashMap">
+		select	a.TH_BOARD_NO,
+        		a.TH_BOARD_TITLE,
+        		a.TH_BOARD_CONTENTS,
+        		a.TH_BOARD_DATE,
+				b.TH_USER_ID,
+        		b.TH_USER_NICKNAME
+        FROM	TH_BOARD a , TH_USER  b
+        WHERE	a.TH_USER_ID = b.TH_USER_ID
+        order by TH_BOARD_NO desc
+	</select>
+	
+	<select id="boardNoMax" resultType="int">
+		select max(TH_BOARD_NO) from TH_BOARD	
+	</select>
+	
+	<select id="login" resultType="hashMap">
+		select	TH_USER_ID as id , TH_USER_NICKNAME as nickname , TH_USER_PASSWORD as password from TH_USER
+		where	TH_USER_ID =#{TH_USER_ID}
+	</select>
+	
+	<select id="detail" resultType="hashMap">
+	SELECT  a.TH_BOARD_NO,
+        	a.TH_BOARD_TITLE,
+        	a.TH_BOARD_CONTENTS,
+        	a.TH_BOARD_DATE,
+        	a.TH_BOARD_CNT,
+        	a.TH_BOARD_LIKE,
+			b.TH_USER_ID,
+        	b.TH_USER_NICKNAME
+	FROM	TH_BOARD a , TH_USER  b 
+	WHERE	TH_BOARD_NO = #{TH_BOARD_NO} 
+	AND		a.TH_USER_ID = b.TH_USER_ID
+	</select>
+	
+	<insert id="insert">
+		insert into TH_BOARD(TH_BOARD_NO, TH_BOARD_TITLE, TH_BOARD_CONTENTS, TH_USER_ID, TH_BOARD_DATE)
+		values (#{TH_BOARD_NO}, #{TH_BOARD_TITLE}, #{TH_BOARD_CONTENTS}, #{TH_USER_ID}, #{TH_BOARD_DATE})
+	</insert>
+	
+	<insert id="createUser">
+		insert into TH_USER(TH_USER_ID, TH_USER_PASSWORD, TH_USER_NAME, TH_USER_NICKNAME, TH_USER_BIRTH, TH_USER_GENDER, TH_USER_PH)
+		values (#{TH_USER_ID}, #{TH_USER_PASSWORD}, #{TH_USER_NAME}, #{TH_USER_NICKNAME}, #{TH_USER_BIRTH}, #{TH_USER_GENDER}, #{TH_USER_PH})
+	</insert>
+	
+	<delete id="delete">
+		delete from TH_BOARD where TH_BOARD_NO=#{TH_BOARD_NO}
+	</delete>
+	
+	<update id="update">
+		update TH_BOARD set TH_BOARD_TITLE=#{TH_BOARD_TITLE}, TH_BOARD_CONTENTS=#{TH_BOARD_CONTENTS} where TH_BOARD_NO=#{TH_BOARD_NO}
+	</update>
+</mapper>
